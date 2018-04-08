@@ -207,7 +207,7 @@ public class SellFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(Holder holder, int position) {
-            SellItem item=sellItems.get(position);
+            SellItem item=sellItems.get(getItemCount()-1-position);
             holder.bindText("Owner: " +item.getmOwner(),"Title: "+item.getmCaption(),item.getImagName(),"Desc: "+item.getDescription());
         }
 

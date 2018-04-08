@@ -2,11 +2,14 @@ package com.buddy.campus.campusbuddy;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,7 +93,7 @@ public class UserInfo extends Fragment {
                     minfoItems.add(si);
                     }
                 }
-
+                recyclerView.setAdapter(new picAdapter(minfoItems));
                 //listener.onDataLoaded();
             }
             @Override
@@ -107,7 +110,54 @@ public class UserInfo extends Fragment {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_user_info, container, false);
         recyclerView=(RecyclerView) view.findViewById(R.id.info_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+    public class Holder extends RecyclerView.ViewHolder  implements View.OnClickListener{
+        TextView name,title,textV;
+        public Holder(View itemView) {
+            super(itemView);
+            name=(TextView) itemView.findViewById(R.id.main_name);
+            title=(TextView) itemView.findViewById(R.id.main_title);
+            textV=(TextView) itemView.findViewById(R.id.main_text);
+            itemView.setOnClickListener(this);
+        }
+
+        public void bindText(String nme,String titl,String txt){
+            name.setText(nme);
+            title.setText(titl);
+            textV.setText(txt);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+    private class picAdapter extends RecyclerView.Adapter<Holder>{
+        List<infoItem> Items;
+
+        public picAdapter(List<infoItem> msellItems) {
+            this.Items = msellItems;
+        }
+
+        @Override
+        public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater=LayoutInflater.from(getActivity());
+            View view= layoutInflater.inflate(R.layout.mainview,parent,false);
+            return new Holder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(Holder holder, int position) {
+            infoItem item=Items.get(position);
+            holder.bindText("Name: " +item.getName(),"Title: "+item.getTitle(),item.getTxt());
+        }
+
+        @Override
+        public int getItemCount() {
+            return Items.size();
+        }
     }
 
 }
